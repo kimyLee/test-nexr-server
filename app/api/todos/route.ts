@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllTodos, createTodo } from '../../lib/todo-service';
+import { getAllTodos, createTodo } from '../../lib/todo-service-db';
 import { CreateTodoRequest } from '../../lib/models';
 
 // 获取所有Todo项目
 export async function GET() {
   try {
-    const todos = getAllTodos();
+    const todos = await getAllTodos();
     return NextResponse.json(todos);
   } catch (error) {
     console.error('Error fetching todos:', error);
@@ -24,17 +24,17 @@ export async function POST(request: NextRequest) {
     // 验证请求数据
     if (!body.title || typeof body.title !== 'string') {
       return NextResponse.json(
-        { error: '标题是必填项且必须是字符串' },
+        { error: '标题是必需的，且必须是字符串' },
         { status: 400 }
       );
     }
     
     const todoData: CreateTodoRequest = {
       title: body.title,
-      description: body.description
+      description: body.description || ''
     };
     
-    const newTodo = createTodo(todoData);
+    const newTodo = await createTodo(todoData);
     return NextResponse.json(newTodo, { status: 201 });
   } catch (error) {
     console.error('Error creating todo:', error);

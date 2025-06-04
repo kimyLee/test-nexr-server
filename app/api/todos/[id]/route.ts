@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTodoById, updateTodo, deleteTodo } from '../../../lib/todo-service';
+import { getTodoById, updateTodo, deleteTodo } from '../../../lib/todo-service-db';
 import { UpdateTodoRequest } from '../../../lib/models';
 
 // 获取单个Todo项目
@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const todo = getTodoById(id);
+    const todo = await getTodoById(id);
     
     if (!todo) {
       return NextResponse.json(
@@ -58,7 +58,7 @@ export async function PUT(
       completed: body.completed
     };
     
-    const updatedTodo = updateTodo(id, todoData);
+    const updatedTodo = await updateTodo(id, todoData);
     
     if (!updatedTodo) {
       return NextResponse.json(
@@ -84,7 +84,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const success = deleteTodo(id);
+    const success = await deleteTodo(id);
     
     if (!success) {
       return NextResponse.json(
