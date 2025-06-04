@@ -5,10 +5,10 @@ import { UpdateTodoRequest } from '../../../lib/models';
 // 获取单个Todo项目
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const todo = getTodoById(id);
     
     if (!todo) {
@@ -31,10 +31,10 @@ export async function GET(
 // 更新Todo项目
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const body = await request.json();
     
     // 验证请求数据
@@ -80,10 +80,10 @@ export async function PUT(
 // 删除Todo项目
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const success = deleteTodo(id);
     
     if (!success) {
