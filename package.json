@@ -10,11 +10,14 @@
   "dependencies": {
     "@types/pg": "^8.15.4",
     "next": "15.3.3",
-    "pg": "^8.16.0"
+    "next-swagger-doc": "^0.4.1",
+    "pg": "^8.16.0",
+    "swagger-ui-react": "^5.22.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
+    "@types/swagger-ui-react": "^5.18.0",
     "typescript": "^5"
   }
 }

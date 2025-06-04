@@ -2,6 +2,15 @@ import { NextResponse } from 'next/server';
 import { createTodosTable, query } from '../lib/db';
 import { Todo } from '../lib/models';
 
+/**
+ * @swagger
+ * tags:
+ *   - name: Todos
+ *     description: Todo项目管理
+ *   - name: Database
+ *     description: 数据库操作
+ */
+
 // 示例数据
 const sampleTodos: Todo[] = [
   {
@@ -86,7 +95,35 @@ const clearDatabase = async () => {
   }
 };
 
-// GET 请求处理函数 - 初始化数据库
+/**
+ * @swagger
+ * /seed:
+ *   get:
+ *     summary: 初始化数据库
+ *     description: 创建todos表并插入示例数据
+ *     tags:
+ *       - Database
+ *     responses:
+ *       200:
+ *         description: 数据库初始化成功
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: 成功信息
+ *                 count:
+ *                   type: integer
+ *                   description: 插入的示例数据数量
+ *       500:
+ *         description: 服务器错误
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET() {
   try {
     const success = await seedDatabase();
@@ -110,7 +147,28 @@ export async function GET() {
   }
 }
 
-// DELETE 请求处理函数 - 清空数据库
+/**
+ * @swagger
+ * /seed:
+ *   delete:
+ *     summary: 清空数据库
+ *     description: 清空todos表中的所有数据
+ *     tags:
+ *       - Database
+ *     responses:
+ *       200:
+ *         description: 数据库清空成功
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ *       500:
+ *         description: 服务器错误
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function DELETE() {
   try {
     const success = await clearDatabase();

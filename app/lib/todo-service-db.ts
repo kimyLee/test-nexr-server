@@ -2,9 +2,24 @@ import { Todo, CreateTodoRequest, UpdateTodoRequest } from './models';
 import { query } from './db';
 
 // 读取所有Todo项目
-export const getAllTodos = async (): Promise<Todo[]> => {
+export const getAllTodos = async (sortBy: string = 'createdAt', sortOrder: string = 'desc'): Promise<Todo[]> => {
   try {
-    const result = await query('SELECT * FROM todos ORDER BY created_at DESC');
+    // 映射前端排序字段到数据库字段
+    const dbSortFieldMap: { [key: string]: string } = {
+      'title': 'title',
+      'createdAt': 'created_at'
+    };
+    
+    // 获取数据库排序字段，默认为created_at
+    const dbSortField = dbSortFieldMap[sortBy] || 'created_at';
+    
+    // 验证排序方向
+    const dbSortOrder = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+    
+    // 构建SQL查询
+    const sql = `SELECT * FROM todos ORDER BY ${dbSortField} ${dbSortOrder}`;
+    
+    const result = await query(sql);
     return result.rows.map(row => ({
       id: row.id.toString(),
       title: row.title,
